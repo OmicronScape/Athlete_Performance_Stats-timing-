@@ -1,0 +1,72 @@
+ΑΛΓΟΡΙΘΜΟΣ Στατιστικά_Αθλητών
+
+ΣΤΑΘΕΡΕΣ
+athletes := 8;
+
+ΔΕΔΟΜΕΝΑ
+best_before_finals: ΠΙΝΑΚΑΣ[athletes] OF INTEGER;
+timing_finals: ΠΙΝΑΚΑΣ[athletes] OF INTEGER;
+max, min, improvement: REAL;
+i, count_below_9_80, greatest_improvement, best_athlete: INTEGER;
+
+ΑΡΧΗ
+    /# Αρχικοποίηση μεταβλητών #/
+    max := 0.0;
+    min := 10.50;
+    count_below_9_80 := 0;
+    greatest_improvement := 0.0;
+    best_athlete := -1;
+    
+    /# Μέρος Β.1: Εισαγωγή και έλεγχος τιμών στους πίνακες #/
+    ΓΙΑ i ΑΠΟ 0 ΜΕΧΡΙ athletes - 1 ΜΕ ΒΗΜΑ 1
+        ΕΠΑΝΑΛΑΒΕ
+            ΤΥΠΩΣΕ("Δώσε τον καλύτερο χρόνο πριν από τους Ολυμπιακούς Αγώνες για τον αθλητή ", i + 1, ": ");
+            ΔΙΑΒΑΣΕ(best_before_finals[i]);
+            ΕΑΝ best_before_finals[i] < 9.50 Ή best_before_finals[i] > 10.50 ΤΟΤΕ
+                ΕΜΦΑΝΙΣΕ("Ο χρόνος πρέπει να είναι μεταξύ 9.50 και 10.50 δευτερολέπτων.");
+            ΕΑΝ-ΤΕΛΟΣ;
+        ΜΕΧΡΙΣ  best_before_finals[i] >= 9.50 ΚΑΙ best_before_finals[i] <= 10.50;
+    
+        ΕΠΑΝΑΛΑΒΕ
+            ΤΥΠΩΣΕ("Δώσε τον χρόνο στον τελικό για τον αθλητή ", i + 1, ": ");
+            ΔΙΑΒΑΣΕ(timing_finals[i]);
+            ΑΝ timing_finals[i] < 9.50 Ή timing_finals[i] > 10.50 ΤΟΤΕ
+                ΕΜΦΑΝΙΣΕ("Ο χρόνος πρέπει να είναι μεταξύ 9.50 και 10.50 δευτερολέπτων.");
+            ΕΑΝ-ΤΕΛΟΣ;
+        ΜΕΧΡΙΣ timing_finals[i] >= 9.50 ΚΑΙ timing_finals[i] <= 10.50;
+    ΓΙΑ-ΤΕΛΟΣ;
+    
+    /# Μέρος Β.2: Εύρεση του καλύτερου και χειρότερου χρόνου πριν τους Ολυμπιακούς Αγώνες #/
+    ΓΙΑ i ΑΠΟ 0 ΜΕΧΡΙ athletes - 1 ΜΕ ΒΗΜΑ 1
+        ΕΑΝ best_before_finals[i] > max ΤΟΤΕ
+            max := best_before_finals[i];
+        ΕΑΝ-ΤΕΛΟΣ;
+    
+        ΕΑΝ best_before_finals[i] < min ΤΟΤΕ
+            min := best_before_finals[i];
+        ΕΑΝ-ΤΕΛΟΣ;
+    ΓΙΑ-ΤΕΛΟΣ;
+    
+    /# Μέρος Β.3: Υπολογισμός του πλήθους των αθλητών με χρόνο κάτω από 9.80 δευτερόλεπτα #/
+    ΓΙΑ i ΑΠΟ 0 ΜΕΧΡΙ athletes - 1 ΜΕ ΒΗΜΑ 1
+        ΕΑΝ timing_finals[i] < 9.80 ΤΟΤΕ
+            count_below_9_80 := count_below_9_80 + 1;
+        ΕΑΝ-ΤΕΛΟΣ;
+    ΓΙΑ-ΤΕΛΟΣ;
+    
+    /# Μέρος Β.4: Εύρεση του αθλητή με τη μεγαλύτερη βελτίωση χρόνου #/
+    ΓΙΑ i ΑΠΟ 0 ΜΕΧΡΙ athletes - 1 ΜΕ ΒΗΜΑ 1
+        improvement := best_before_finals[i] - timing_finals[i];
+        ΑΝ improvement > greatest_improvement ΤΟΤΕ
+            greatest_improvement := improvement;
+            best_athlete := i + 1;
+        ΕΑΝ-ΤΕΛΟΣ;
+    ΓΙΑ-ΤΕΛΟΣ;
+    
+    /# Εμφάνιση των αποτελεσμάτων #/
+    ΕΜΦΑΝΙΣΕ("Καλύτερος χρόνος πριν τον τελικό: ", min);
+    ΕΜΦΑΝΙΣΕ("Χειρότερος χρόνος πριν τον τελικό: ", max);
+    ΕΜΦΑΝΙΣΕ("Πλήθος αθλητών με χρόνο κάτω από 9.80 δευτερόλεπτα: ", count_below_9_80);
+    ΕΜΦΑΝΙΣΕ("Αθλητής με τη μεγαλύτερη βελτίωση: Αθλητής ", best_athlete);
+
+ΤΕΛΟΣ
