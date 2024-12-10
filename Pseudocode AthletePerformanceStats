@@ -1,1 +1,72 @@
+ALGORITHM Athlete_Statistics
 
+CONSTANTS
+athletes := 8;
+
+DATA
+best_before_finals: ARRAY[athletes] OF REAL;
+timing_finals: ARRAY[athletes] OF REAL;
+max, min, improvement: REAL;
+i, count_below_9_80, greatest_improvement, best_athlete: INTEGER;
+
+BEGIN
+/# Initialize variables #/
+max := 0.0;
+min := 10.50;
+count_below_9_80 := 0;
+greatest_improvement := 0.0;
+best_athlete := -1;
+
+/# Part B.1: Input and validate the values for both arrays #/
+FOR i FROM 0 TO athletes - 1 DO
+    REPEAT
+        PRINT("Enter the best time before the Olympics for athlete ", i + 1, ": ");
+        READ(best_before_finals[i]);
+        IF best_before_finals[i] < 9.50 OR best_before_finals[i] > 10.50 THEN
+            PRINT("The time must be between 9.50 and 10.50 seconds.");
+        END IF;
+    UNTIL best_before_finals[i] >= 9.50 AND best_before_finals[i] <= 10.50;
+
+    REPEAT
+        PRINT("Enter the final time for athlete ", i + 1, ": ");
+        READ(timing_finals[i]);
+        IF timing_finals[i] < 9.50 OR timing_finals[i] > 10.50 THEN
+            PRINT("The time must be between 9.50 and 10.50 seconds.");
+        END IF;
+    UNTIL timing_finals[i] >= 9.50 AND timing_finals[i] <= 10.50;
+END FOR;
+
+/# Part B.2: Find the best and worst times before the Olympics #/
+FOR i FROM 0 TO athletes - 1 DO
+    IF best_before_finals[i] > max THEN
+        max := best_before_finals[i];
+    END IF;
+
+    IF best_before_finals[i] < min THEN
+        min := best_before_finals[i];
+    END IF;
+END FOR;
+
+/# Part B.3: Count the number of athletes with a final time under 9.80 seconds #/
+FOR i FROM 0 TO athletes - 1 DO
+    IF timing_finals[i] < 9.80 THEN
+        count_below_9_80 := count_below_9_80 + 1;
+    END IF;
+END FOR;
+
+/# Part B.4: Identify the athlete with the greatest improvement in time #/
+FOR i FROM 0 TO athletes - 1 DO
+    improvement := best_before_finals[i] - timing_finals[i];
+    IF improvement > greatest_improvement THEN
+        greatest_improvement := improvement;
+        best_athlete := i + 1;
+    END IF;
+END FOR;
+
+/# Output the results #/
+PRINT("Best pre-final time: ", min);
+PRINT("Worst pre-final time: ", max);
+PRINT("Number of athletes with a final time under 9.80 seconds: ", count_below_9_80);
+PRINT("Athlete with the greatest improvement: Athlete ", best_athlete);
+
+END ALGORITHM
